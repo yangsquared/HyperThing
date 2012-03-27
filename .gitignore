@@ -1,0 +1,5 @@
+*.pyc
+sitestatic/
+db.sqlite3
+local_settings.py
+logs/
