@@ -1,0 +1,76 @@
+﻿* { margin: 0; padding: 0; 	outline: 0; }
+html { background: #F1F1F2 url(../images/bg.png) repeat-x top; }
+body { background: url(../images/top-bg.png) no-repeat top center; font: 14px Lucida Sans; color: #333; }
+.body-wrap { margin: 0 auto; width: 960px; position: relative; padding: 10px; }
+img { border: none; }
+p { margin: 5px 0 10px;}
+a {	color: #22608D;	text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.color-theme { color: #22608D; }
+.color-grey { color: #666; }
+.color-light-grey, .blur { color: #999; }
+
+.text-huge { font-size: 24px; }
+.text-larger { font-size: 20px; }
+.text-large { font-size: 16px; }
+.text-small { font-size: 12px; }
+.text-smaller { font-size: 11px; }
+
+.align-center { text-align: center; }
+.align-right { text-align: right; }
+
+.textbox-big { background:url(../images/textbox-bg.png) repeat-x top; margin: 20px 0 0 0; padding: 10px; height: 20px; border: 1px solid #CCC; -moz-border-radius: 8px; -webkit-border-radius: 8px; }
+.textbox-big input[type="text"] { width: 100%; border: none; font: 16px Lucida Sans; }
+input[type="submit"] { background:url(../images/btn-bg.png) repeat-x center; height: 40px; display: inline-block; border: 1px solid #CCC; font: 16px Lucida Sans; color: #22608D; cursor: pointer; font-weight: bold; padding: 5px 15px; text-shadow: 0px 1px #FFF; -moz-border-radius: 8px; -webkit-border-radius: 8px; }
+
+.splitter { height: 70px; width: 2px; background:url(../images/splitter.png) no-repeat center; display: inline-block; margin: 0 20px; }
+.example { cursor: pointer; color: #333; }
+.example:hover { background: #FFF1D2; }
+
+#panel-main { background: #E5E5E5 url(../images/panel-bg.png) repeat-x top; margin-top: 80px; padding: 30px; border: 1px solid #CCC; -moz-border-radius: 16px; -webkit-border-radius: 16px; }
+#logo { width: 420px; height: 100px; margin: 0 auto; margin-top: 70px; }
+#validator { width: 600px; margin: 30px auto; }
+#coop { margin: 20px auto; margin-top: 80px; }
+#footer { margin: 10px auto; margin-bottom: 40px; }
+#results { padding: 10px; }
+#result-icon { float: left; margin-right: 10px; }
+#result_string { min-height: 100px; line-height: 140%; font-size: 18px; }
+
+/* panel */
+.panel { border: 1px solid #CCC; background: #FFF; margin-top: -1px; }
+.panel .panel-header { background:url(../images/btn-bg.png) repeat-x center; height: 24px; padding: 8px; }
+.panel .panel-toggle-expand { float: left; margin-right: 4px; height: 24px; width: 24px; background:url(../images/icon-toggle-expand.png) no-repeat center; cursor: pointer; }
+.panel .panel-toggle-collapse { float: left; margin-right: 4px; height: 24px; width: 24px; background:url(../images/icon-toggle-collapse.png) no-repeat center; cursor: pointer; }
+.panel .panel-header h2 { font-size: 16px; color: #22608D; font-weight: bold; text-shadow: 0px 1px #FFF; padding: 2px 0; }
+.panel .panel-body { padding: 30px; }
+
+.table-block { border: none; }
+.block { background: #F2F2F2; padding: 20px; font-size: 14px; -moz-border-radius: 8px; -webkit-border-radius: 8px; }
+.block h3 { text-align: center; padding: 8px 0; font-size: 14px; }
+.connect { background: url(../images/arrow.png) no-repeat left bottom; padding: 0 10px 16px 10px; min-width: 20px; margin: 0 5px; display: inline-block; height: 14px; }
+.arrow { background: url(../images/arrow.png) no-repeat right bottom; padding: 0 10px 16px 10px; min-width: 20px; margin: 0 5px; display: inline-block; height: 14px; }
+.arrow span { padding: 0 20px 0 10px; display: block; min-width: 40px; }
+ul.summary li { list-style: none; border-bottom: 1px dotted #CCC; padding: 10px 0; }
+.summary-icon { float: left; margin-right: 8px; }
+
+.process p { margin-bottom: 20px; }
+.block-url { background: #22608D; color: #FFF; padding: 5px 10px; font-size: 14px; -moz-border-radius: 8px; -webkit-border-radius: 8px; display: inline-block; vertical-align: bottom; text-align: left; }
+.block-url a { color: #FFF; }
+.block-icon { vertical-align: middle; margin-right: 10px; }
+
+.more { display: none; }
+.more-table { margin: 20px 0; border-collapse: collapse; font-size: 12px; width: 100%; }
+.more-table td { padding: 10px; border: 1px solid #22608D; }
+.more-table thead td { background: #22608D; color: #FFF; font-weight: bold; }
+.more-table td.code { font-weight: bold; }
+
+.table-diagram td { padding: 5px; text-align: center; }
+
+/* Clearfix */
+.clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+.clearfix { display: inline-block; }
+/* required comment for clearfix to work in Opera \*/
+* html .clearfix { height:1%; }
+.clearfix { display:block; }
+/* end clearfix */

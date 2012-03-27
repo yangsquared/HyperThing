@@ -1,0 +1,422 @@
+<html>
+<head>
+    <title>Hyperthing</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css" />
+    <script type="text/javascript" src="/static/js/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.hint.js"></script>
+    <script type="text/javascript" src="/static/js/base.js"></script>
+</head>
+
+
+<body>
+<div class="body-wrap">
+
+<div id="panel-main" class="clearfix">
+
+
+    <div id="logo">
+       	<a href="http://hyperthing.org">
+		<img src="/static/images/logo.png" alt="Hyperthing Logo" /> </a>
+    </div>
+    
+    <div id="validator">
+        <p class="align-center color-theme">
+			Hyperthing tells whether your requested URI is a thing or a document.	
+        </p>	
+    
+        <form method="get" action="/validate">
+            <div class="textbox-big"><span><input id="URI_input" type="text" value="" name="url" title="Enter URI here" /></span></div>	        
+	        <p class="text-small color-grey" style="padding: 0 10px;">
+		 
+	            Example:	
+	            <tt class="example">http://dbpedia.org/resource/Tim_Berners-Lee</tt><br />
+				<tt class="example">http://www.w3.org/People/Berners-Lee/</tt><br />
+				<tt class="example">http://www.w3.org/People/Berners-Lee/card#i</tt><br />
+				
+	        </p>	
+	        <p class="align-center">
+	            <input type="submit" name="validate" value="Validate"> 
+	        </p>        
+        </form>
+    </div>
+
+ 
+{% if info%}
+    <div id="results">
+    
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-toggle-collapse"></div>
+                <h2>Result</h2>
+            </div>
+            <div class="panel-body">
+                <div id="result-icon"></div>
+                <h2 id="result_string">{{info|urlize}}</h2>
+            </div>
+        </div>    
+        
+	{%ifnotequal isException 1%}
+
+
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-toggle-collapse"></div>
+                <h2>Summary</h2>
+            </div>
+            <div class="panel-body">
+            
+                <table class="table-block" cellpadding=0 cellspacing=0 >
+                <tr>
+                <td width=100>
+                    <div class="block">
+                        <img src="/static/images/icon-client.png" alt="Client" />
+                        <h3>Client</h3>
+                    </div>
+                </td>                            
+                
+                <td width=50>
+                    <div class="connect">
+                    </div>
+                </td>
+                
+                <td width=500>
+                    <div class="block">
+                        {% if summary %}
+                        <p><b>{{summary}}</b></p>                                    
+                        {% endif %}
+                        
+                        <ul class="summary">
+						    {%ifnotequal summaryAString 'Empty'%}    
+						    <li>
+                                {%if summaryAStatus == 0 %}
+							        <img class="summary-icon" src="/static/images/icon-check.png" alt="Right" />    
+						        {%endif%}	
+							    {%if summaryAStatus == 1 %}
+								    <img class="summary-icon" src="/static/images/icon-warning.png" alt="Warning" />    
+							    {%endif%}	
+							    <p>{{summaryAString}}</p>
+						    </li>
+						    {%endifnotequal%}                    
+
+                            {%ifnotequal summaryBString 'Empty'%}
+                            <li>
+                                {%if summaryBStatus == 0 %}
+                                    <img class="summary-icon" src="/static/images/icon-check.png" alt="Right" />    
+                                {%endif%}	
+                                {%if summaryBStatus == 1 %}
+                                    <img class="summary-icon" src="/static/images/icon-warning.png" alt="Warning" />    
+                                {%endif%}
+                                <p>{{summaryBString}}</p>
+                            </li>
+                            {%endifnotequal%}	
+
+
+                            {%ifnotequal summaryCString 'Empty'%}    
+                            <li>
+                                {%if summaryCStatus == 0 %}
+                                    <img class="summary-icon" src="/static/images/icon-check.png" alt="Right" />    
+                                {%endif%}	
+                                {%if summaryCStatus == 1 %}
+                                    <img class="summary-icon" src="/static/images/icon-warning.png" alt="Warning" />   
+                                {%endif%}
+                                <p>{{summaryCString}}</p>		
+                            </li>
+                            {%endifnotequal%}	
+                        </ul>                
+                    </div>
+                </td>
+                
+                <td width=50>
+				    <div class="connect"></div>
+				</td>				
+				
+				<td width=100>
+                    <div class="block">
+                        <img src="/static/images/icon-server.png" alt="Server" />
+                        <h3>Server</h3>
+                    </div>
+                </td>
+
+                </tr>   
+                </table>
+
+            </div>
+        </div> 
+        
+    
+
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-toggle-collapse"></div>
+                <h2>Dereferencing URI process</h2>
+            </div>
+            <div class="panel-body">
+
+                <div class="process align-center">
+				{% for pairs in finalStatusAndURL %}
+					{%ifequal pairs.status 0 %}
+					    <p class="align-center"><div class="block-url">{{pairs.url}}</div></p>
+					{%else%}
+						{%ifequal pairs.status 200 %}
+						    <p class="align-center">
+					 	        <img class="block-icon" src="/static/images/arrow-down.png" />
+					 	        {{pairs.status}}
+					 	    </p>
+					 	    <p class="align-center">
+					 	        <div class="block" style="display: inline-block;">
+					 	            <img class="block-icon" src="/static/images/icon-file.png" alt="File" />
+					 	            Document
+					 	        </div>
+					 	    </p>
+						{%else%}
+						    {%ifequal pairs.status empty %}
+						        <p class="align-center">
+					 	            <img class="block-icon" src="/static/images/arrow-down.png" />
+					 	            {{pairs.status}}
+					 	        </p>
+					 	        <p class="align-center">
+					 	            <div class="block" style="display: inline-block;">
+					 	                <img class="block-icon" src="/static/images/icon-document.png" alt="File" />
+					 	                No Document Returned
+					 	            </div>
+					 	        </p>
+						    {%else%}
+						        <p class="align-center">
+					 	            <img class="block-icon" src="/static/images/arrow-down.png" />
+					 	            {{pairs.status}}
+					 	        </p>
+					 	        <p class="align-center">
+					 	            <div class="block-url">{{pairs.url}}</div>
+					 	        </p>
+							{%endifequal%}	
+				
+						{%endifequal%}	
+					{%endifequal%}	
+				{%endfor%}
+                </div>
+
+		        <p><a class="show-more show-more-label" href="#0">Show more...</a></p>
+		        <div class="more">				    
+                    <table class="more-table">
+                        <thead>
+                            <tr>
+                                <td>Applied URI rewriting rules</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-large">
+    			                    Applied Formula(s): 
+				                    {%for f in formulaList%} 
+					                    <b>{{f}}</b>
+					                    {%if not forloop.last %}, {% endif %}
+				                    {%endfor%}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="more-table">
+                        <thead>
+                            <tr>
+                                <td class="code">Code</td>
+                                <td>Meaning</td>
+                                <td>Response</td>
+                                <td>Resource</td>
+                                <td>Formula</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="code">200</td>
+                                <td>OK</td>
+                                <td>DOC (document)</td>
+                                <td>Information Resource</td>
+                                <td>(2) and (7)</td>
+                            </tr>
+                            <tr>
+                                <td class="code">301</td>
+                                <td>Moved Permanently</td>
+                                <td>URI</td>
+                                <td>Unknown</td>
+                                <td>(3) and (8)</td>
+                            </tr>
+                            <tr>
+                                <td class="code">302</td>
+                                <td>Found</td>
+                                <td>URI</td>
+                                <td>Unknown</td>
+                                <td>(4) and (8)</td>
+                            </tr>
+                            <tr>
+                                <td class="code">303</td>
+                                <td>See Other</td>
+                                <td>URI</td>
+                                <td>Unknown</td>
+                                <td>(5) and (8)</td>
+                            </tr>                                                
+                            <tr>
+                                <td class="code">307</td>
+                                <td>Temporary Redirect</td>
+                                <td>URI</td>
+                                <td>Unknown</td>
+                                <td>(4) and (8)</td>
+                            </tr>                                                
+                            <tr>
+                                <td class="code">Other 4XX (406)</td>
+                                <td>Client Error</td>
+                                <td>BAD</td>
+                                <td>Unknown (Information Resource)</td>
+                                <td>(5)</td>                    
+                            </tr> 
+                            <tr>
+                                <td class="code">5XX</td>
+                                <td>Server Error</td>
+                                <td>BAD</td>
+                                <td>Unknown</td>
+                                <td>(5)</td>
+                            </tr>  
+                            <tr>
+                                <td class="code">unhash</td>
+                                <td>See Fragment Identifier</td>
+                                <td> - </td>
+                                <td>Unknown</td>
+                                <td>(6)</td>
+                            </tr>                                             
+                        </tbody>
+                    </table>
+                    <p class="align-center">
+                        <img width="600px" src="/static/images/URI_Rewriting_Rules.png" alt="URI Rewriting Rules" />
+                    </p>
+					<p>
+						More details about the model can be found here: 
+						<a href= http://dl.dropbox.com/u/4138729/paper/dereference_iswc2011.pdf>Dereferencing Cool URI for the Semantic Web: What is 200 OK on the Semantic Web?</a>
+					</p>
+
+                </div>
+
+
+            </div>
+        </div>  
+
+
+	    {%if numberTriple%}
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-toggle-collapse"></div>
+                <h2>What URI identifies</h2>
+            </div>
+            <div class="panel-body">
+                <table class="table-diagram">
+                    <tr>
+                        <td>
+        		        {%if targetURI%}
+                            <div class="block-url">
+		                        <b>Requested URI:</b>
+		                        <div class="text-small">{{targetURI}}</div>
+                            </div>
+		                {% endif %}
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        {%if returnedDocURI%}
+	                        <div class="block-url">
+	                            <b>Returned Document URI:</b> 
+	                            <div class="text-small">{{returnedDocURI}}</div>
+	                        </div>	                            
+	                    {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img class="block-icon" src="/static/images/arrow-down.png" />
+                            identifies
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            <img class="block-icon" src="/static/images/arrow-down.png" />
+                            identifies
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="block">
+                                <img class="block-icon" src="/static/images/icon-objects.png" />
+                                Real World Objects
+                            </div>
+                        </td>
+                        <td>
+                            <div class="align-center">describes</div>
+                            <img class="block-icon" src="/static/images/arrow-left.png" />
+                        </td>
+                        <td>
+                            <div class="block">
+                                <img class="block-icon" src="/static/images/icon-file.png" />
+                                <b>Number of RDF Triple:</b> {{numberTriple}}
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+		{% endif %}
+		
+		<p><a href="#">Back to Top</a></p>
+
+    </div>
+    
+    
+    {%endifnotequal%}
+
+{% else %}
+
+<p>
+<b>Why should I care?</b>
+<p>
+	Semantic Web proposed by Tim Berners Lee is to use the existing Web Architecture to publish data in a similar fashion of publishing the webpage, so that when a person/agent look at that data can get a description about the data, therefore establish global understanding of the data. By doing this, we can make much more use of the data and build more intelligent services. 
+</p>	
+	
+<p>
+	The Semantic Web idea can be implemented by doing 1) describe and publish the data by using RDF (Resource Description Framework) 2) Adding links between data, so that the data make more sense in the global context, people/agent can follow the link to discover more things.  This is also known as <a href= http://www.w3.org/DesignIssues/LinkedData.html>Linked Data</a>, which is the core of the Semantic Web.
+
+<p>	
+	Unlike the traditional Web URI link you to a webpage, the <a href= http://www.w3.org/DesignIssues/HTTP-URI2.html>Semantic Web URI</a> identifies a real world object (e.g. a person). In order to make distinguish between the Semantic Web URI and traditional Web document URI, the W3C has proposed "<a href= http://www.w3.org/TR/cooluris/>Cool URIs for the Semantic Web</a>" to use HTTP 303 redirection and # URI to publish a URI which identifies a thing. 
+</p>
+
+<p>	
+	Hyperthing mainly functions for three purposes: 1) It determines if the requested URI identifies a Real World Object or a Web document; 2) It checks whether the URIs publishing method follows the W3C hash URIs and 303 URI practice; 3) It can be used to check the validity of the chains of the redirection between the Real World Object URIs and Document URIs to prevent the data publisher mistakenly redirecting between these two kinds.
+</p>	
+</p>
+For More information please read <a href= http://dl.dropbox.com/u/4138729/paper/dereference_iswc2011.pdf>Dereferencing Cool URI for the Semantic Web: What is 200 OK on the Semantic Web?</a>
+</p>
+
+    
+{%endif%}
+
+
+
+
+    <div id="coop" class="align-center">
+        <img src="/static/images/EnAKTingLogoFinal.png" alt="enAKTing Logo" height="70" />
+        <div class="splitter"></div>
+        <img src="/static/images/logo-uos.png" alt="University of Southampton Logo" height="70" />
+    </div>
+
+</div>
+
+<div id="footer">
+    <p class="text-smaller align-center">
+        &copy; Copyright Southampton University 2011 | Developer: <a href = "http://www.ecs.soton.ac.uk/people/yy1402"> Yang Yang (Model, Implementation) </a>, Haiyan Che (Implementation, Evaluation), <a href = "http://www.ecs.soton.ac.uk/people/nmg"> Nick Gibbins (Model) </a> | Graphically designed by <a href="http://www.doublejdesign.co.uk">Double-J Design</a>
+        | <a href="https://github.com/yangsquared/HyperThing">Hyperthing Project Source Code</a>
+    </p>
+</div>
+
+
+</div>
+</body>
+</html>
+
+
+
+
